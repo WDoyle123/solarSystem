@@ -1,10 +1,11 @@
 let sun // let is used so sun cannot be reassigned
 let planets = []
-let G = 50
-let numPlanets = 8
-let eccentric = 0.5
+let G = 10
+let Gm = 10
+let numPlanets = 5
+let eccentric = 0.2
 let moons = []
-let numMoon = 5
+let numMoon = 2
 let earth
 
 
@@ -14,7 +15,7 @@ function setup() {
 
 	let r = random(sun.r, min(windowWidth/2, windowHeight/2)) // radial distance from sun is min: sun radius and max: width of window
 	let theta = random(TWO_PI)
-	let earthPos = createVector(r*cos(theta), r*sin(theta))
+	let earthPos = createVector(-400, 400)
 
 	// earth velocity
 	let earthVel = earthPos.copy()
@@ -29,15 +30,16 @@ function setup() {
 
 		
 		let r = random(sun.r, min(windowWidth/2, windowHeight/2)) // radial distance from sun is min: sun radius and max: width of window
-		let minDist = random(80,120)
-		let moonPos = createVector(earthPos.x+minDist,earthPos.y+minDist)
+		let minDistx = random(80,120)
+		let minDisty = random(-80,-40)
+		let moonPos = createVector(earthPos.x+minDistx,earthPos.y+minDisty)
 		
 		
 			// moon velocity
-		let moonVel = moonPos.copy()
+		let moonVel = earthPos.copy()
 		moonVel.rotate(HALF_PI)
-		moonVel.setMag(sqrt(G*earth.mass/moonPos.mag()))
-		moons.push  (new body(random(0.0001),moonPos,moonVel))
+		moonVel.setMag(sqrt(Gm*earth.mass/moonPos.mag()))
+		moons.push  (new body(random(2,8),moonPos,moonVel))
 
 	}
 
@@ -55,7 +57,7 @@ function setup() {
 		planetVel.rotate(HALF_PI)
 		planetVel.setMag(sqrt(G*sun.mass/planetPos.mag()))
 		planetVel.mult(random( 1-eccentric , 1+eccentric) )
-		planets.push (new body(random(10,30), planetPos, planetVel))
+		planets.push (new body(random(10,25), planetPos, planetVel))
 	}
 	
 }
@@ -70,6 +72,7 @@ function draw() {
 	}
 	for(let i = 0; i < moons.length; i++){
 		earth.attract(moons[i])
+		sun.attract(moons[i])
 		moons[i].update()
 		moons[i].show()
 	}
