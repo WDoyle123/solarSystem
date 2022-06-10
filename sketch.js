@@ -1,20 +1,51 @@
 let sun // let is used so sun cannot be reassigned
 let planets = []
-let G = 100
-let numPlanets = 5
+let G = 10
+let numPlanets = 8
 let eccentric = 0.5
-
-
+let moons = []
+let numMoon = 5
+let earth
 
 
 function setup() {
 	createCanvas(windowWidth, windowHeight)
 	sun = new body(100, createVector(0,0), createVector(0,0))
 
+	let r = random(sun.r, min(windowWidth/2, windowHeight/2)) // radial distance from sun is min: sun radius and max: width of window
+	let theta = random(TWO_PI)
+	let earthPos = createVector(r*cos(theta), r*sin(theta))
+
+	// earth velocity
+	let earthVel = earthPos.copy()
+	earthVel.rotate(HALF_PI)
+	earthVel.setMag(sqrt(G*sun.mass/earthPos.mag()))
+	earth = new body(25,earthPos,earthVel)
+
+
+
+	
+	for (let i =0; i <numMoon; i++){
+
+		
+		let r = random(sun.r, min(windowWidth/2, windowHeight/2)) // radial distance from sun is min: sun radius and max: width of window
+		let minDist = random(80,120)
+		let moonPos = createVector(earthPos.x+minDist,earthPos.y+minDist)
+		
+		
+			// moon velocity
+		let moonVel = moonPos.copy()
+		moonVel.rotate(HALF_PI)
+		moonVel.setMag(sqrt(G*earth.mass/moonPos.mag()))
+		moons.push  (new body(random(0.0001),moonPos,moonVel))
+
+	}
+
+	
 	for (let i =0; i < numPlanets; i++){
 		
 		// planet position
-		let r = random(sun.r, min(windowWidth/2, windowHeight)) // radial distance from sun is min: sun radius and max: width of window
+		let r = random(sun.r, min(windowWidth/2, windowHeight/2)) // radial distance from sun is min: sun radius and max: width of window
 		let theta = random(TWO_PI)
 		let planetPos = createVector(r*cos(theta), r*sin(theta))
 		
@@ -26,16 +57,26 @@ function setup() {
 		planetVel.mult(random( 1-eccentric , 1+eccentric) )
 		planets.push (new body(random(10,30), planetPos, planetVel))
 	}
+	
 }
 
 function draw() {
 	translate(width/2,height/2)
-	background(180)
+	background(45)
 	for (let i = 0; i < planets.length; i++)	{
 		sun.attract(planets[i])
 		planets[i].update()
 		planets[i].show()
 	}
+	for(let i = 0; i < moons.length; i++){
+		earth.attract(moons[i])
+		moons[i].update()
+		moons[i].show()
+	}
+	sun.attract(earth)
+	earth.update()
+	earth.show()
+	sun.update()
 	sun.show()
 }
 
@@ -49,7 +90,7 @@ function body(mass,pos,vel){ // function to assign characteristics to bodies
 	this.show = function(){
 		noStroke(); fill(255);
 		ellipse(this.pos.x,this.pos.y,this.r,this.r) // creates an ellipse with position (x,y) and radius x,y = r
-		stroke(30);
+		stroke(255);
 		for (let i = 0; i < this.path.length - 2; i++) {
 			line(this.path[i].x, this.path[i].y , this.path[i+1].x , this.path[i+1].y)
 		}
@@ -60,7 +101,7 @@ function body(mass,pos,vel){ // function to assign characteristics to bodies
 		this.pos.x += this.vel.x
 		this.pos.y += this.vel.y
 		this.path.push(this.pos.copy())
-		if (this.path.length >500) { // keep path at constant length
+		if (this.path.length >50) { // keep path at constant length
 			this.path.splice (0,1)
 		}
 	}
