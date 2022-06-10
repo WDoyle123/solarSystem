@@ -1,6 +1,6 @@
 let sun // let is used so sun cannot be reassigned
 let planets = []
-let G = 10
+let G = 50
 let numPlanets = 8
 let eccentric = 0.5
 let moons = []
