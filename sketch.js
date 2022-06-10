@@ -1,11 +1,11 @@
 let sun // let is used so sun cannot be reassigned
 let planets = []
-let G = 10
+let G = 100
 let Gm = 10
 let numPlanets = 5
-let eccentric = 0.2
+let eccentric = 0.25
 let moons = []
-let numMoon = 2
+let numMoon = 3
 let earth
 
 
@@ -47,7 +47,7 @@ function setup() {
 	for (let i =0; i < numPlanets; i++){
 		
 		// planet position
-		let r = random(sun.r, min(windowWidth/2, windowHeight/2)) // radial distance from sun is min: sun radius and max: width of window
+		let r = random(sun.r, min(windowWidth/3, windowHeight/3)) // radial distance from sun is min: sun radius and max: width of window
 		let theta = random(TWO_PI)
 		let planetPos = createVector(r*cos(theta), r*sin(theta))
 		
@@ -57,7 +57,7 @@ function setup() {
 		planetVel.rotate(HALF_PI)
 		planetVel.setMag(sqrt(G*sun.mass/planetPos.mag()))
 		planetVel.mult(random( 1-eccentric , 1+eccentric) )
-		planets.push (new body(random(10,25), planetPos, planetVel))
+		planets.push (new body(random(10,18), planetPos, planetVel))
 	}
 	
 }
@@ -104,9 +104,12 @@ function body(mass,pos,vel){ // function to assign characteristics to bodies
 		this.pos.x += this.vel.x
 		this.pos.y += this.vel.y
 		this.path.push(this.pos.copy())
-		if (this.path.length >50) { // keep path at constant length
+		if (this.path.length >20) { // keep path at constant length
 			this.path.splice (0,1)
 		}
+
+
+
 	}
 
 	this.applyForce = function(f) {  
