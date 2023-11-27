@@ -13,4 +13,4 @@ solarSystem is a JavaScript simulation using the p5.js library to model a basic 
 - Customisable parameters for planet and moon generation.
 
 ## Acknowledgments
-Michael Ruppe for original idea
+Michael Ruppe for the original idea
