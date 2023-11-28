@@ -1,6 +1,6 @@
 # SolarSystem
 
-[solarSystem Live Demo](https://physicsbasedsolarsystem.netlify.app/)
+[solarSystem Live Demo](https://wdoyle123.github.io/solarSystem/)
 
 ## Overview
 solarSystem is a JavaScript simulation using the p5.js library to model a basic solar system. It includes a sun, planets, and moons with newtonian gravitational interactions. The simulation runs in a web browser and provides a visual representation of the orbital mechanics based on Newtonian physics.
